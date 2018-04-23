@@ -28,16 +28,16 @@ router.get('/update/:category',function(req,res,next){
     return new Promise(function(resolve,reject){
       /*submit this url and get next url */
       function getNextUrl(url){
-        if(url!==null)
-          fkClient.getProductsFeed(url).then(function(value){
-            dbConnection.query("insert into nextUrls(category_name,nextUrl) values('"+req.params.category+"','"+JSON.parse(value.body).nextUrl+"')");
-            getNextUrl(JSON.parse(value.body).nextUrl);
-          });
-        else
-          return null;
+        fkClient.getProductsFeed(url).then(function(urlValue){
+          if(JSON.parse(urlValue.body).nextUrl !== null)
+          {
+            dbConnection.query("insert into nextUrls(category_name,nextUrl) values('"+req.params.category+"','"+JSON.parse(urlValue.body).nextUrl+"')");
+            getNextUrl(JSON.parse(urlValue.body).nextUrl);
+          }
+        });
       }
+
       getNextUrl(value);
-      
       resolve("success");
     });
   }).then(function(result){
