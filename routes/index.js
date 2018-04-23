@@ -17,10 +17,15 @@ router.get('/', function(req, res, next) {
   
 });
 
-router.get('/updateListings',function(req,res,next){
 
-dbConnection.query('drop table if exists productFeedListing ;')
-dbConnection.query("create table productFeedListing( category_id int(10) AUTO_INCREMENT,category_name varchar(100), getUrl varchar(200), deltaGetUrl varchar(200), PRIMARY KEY(category_id) )");
+/**********************DB Queries************************/
+
+router.get('/deleteListings',function(req,res,next){
+  dbConnection.query("delete from productFeedListing");
+  res.send("Deleted Listings Successfully");
+});
+
+router.get('/updateListings',function(req,res,next){
 
 fkClient.getProductsFeedListing().then(function(value){
   /*convert string to json*/
@@ -51,10 +56,6 @@ fkClient.getProductsFeedListing().then(function(value){
 }).then(function(value){
   res.send(value);
 });
-
-
-
-
 
 });
 module.exports = router;
