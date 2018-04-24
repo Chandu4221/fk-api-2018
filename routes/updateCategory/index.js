@@ -9,7 +9,7 @@ router.get('/delete/:category',function(req,res,next){
   res.send(req.params.category+"'s all Next URL are Deleted");
 });
 
-router.get('/update/:category',function(req,res,next){
+router.get('/:category',function(req,res,next){
   /*should update the particular category*/
   
   /*get the category Url from the db by checking the category and return as a promise*/

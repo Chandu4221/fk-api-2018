@@ -6,7 +6,8 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
-var nextUrlRouter = require('./routes/nextUrl');
+var updateCategoryRouter = require('./routes/updateCategory');
+var getProductsRouter = require('./routes/getProducts');
 
 var app = express();
 
@@ -24,7 +25,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
-app.use('/nexturl',nextUrlRouter);
+app.use('/updateCategory',updateCategoryRouter);
+app.use('/products',getProductsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
