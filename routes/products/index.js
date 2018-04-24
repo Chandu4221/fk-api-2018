@@ -3,17 +3,6 @@ var router = express.Router();
 var dbConnection = require('../../dbConnection');
 var fkClient = require('../fkClient');
 
-
-// router.get('/:category',function(req,res,next){
-//     fkClient.getProductsFeed("https://affiliate-api.flipkart.net/affiliate/1.0/feeds/krishnacc/category/7jv.json?expiresAt=1524501573216&sig=4212713a5cc55c045de15e59626e026a").then(function(value){
-//         res.send(JSON.parse(value.body));
-//     });
-// });
-
-
-
-
-
 /********* update all products of that catagory *****************/
 router.get('/update/:category',function(req,res,next){
     dbConnection.query("select * from nextUrls where category_name = '"+req.params.category+"'",function(error,results,fields){

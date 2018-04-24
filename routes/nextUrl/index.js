@@ -12,7 +12,7 @@ router.get('/delete/:category',function(req,res,next){
 router.get('/update/:category',function(req,res,next){
   /*should update the particular category*/
   
-  /*get the category Url from the db by checking the category*/
+  /*get the category Url from the db by checking the category and return as a promise*/
   var getCategoryUrl = new Promise(function(resolve,reject){
     dbConnection.query(`select * from productFeedListing`,function(error,results,fields){
       results.forEach(function(result){
@@ -23,27 +23,63 @@ router.get('/update/:category',function(req,res,next){
     });
   });
 
-  getCategoryUrl.then(function(value){
-    //dbConnection.query("drop table if exists nextUrls;");
+  getCategoryUrl.then(function(getUrl){
     return new Promise(function(resolve,reject){
-      /*submit this url and get next url */
-      function getNextUrl(url){
-        fkClient.getProductsFeed(url).then(function(urlValue){
-          if(JSON.parse(urlValue.body).nextUrl !== null)
-          {
-            dbConnection.query("insert into nextUrls(category_name,nextUrl) values('"+req.params.category+"','"+JSON.parse(urlValue.body).nextUrl+"')");
-            getNextUrl(JSON.parse(urlValue.body).nextUrl);
-          }
-        });
-      }
+      /* this promise has to insert data into db and return the products */
+        var insertProductsFromUrl = function(url){
+          if(url==null)
+            console.log(url);
+          fkClient.getProductsFeed(url).then(function(data){
 
-      getNextUrl(value);
-      resolve("success");
+            /*run insert query on the products array*/
+
+            var json_data = JSON.parse(data.body);
+                /* get every product*/
+                 json_data.products.forEach(function(product){
+                /*insert into database */
+                dbConnection.query(`insert into productsfeed(
+                    p_title,
+                    p_category,
+                    p_img_small,
+                    p_img_medium,
+                    p_img_large,
+                    p_retail_price,
+                    p_retail_currency,
+                    p_productUrl,
+                    p_productBrand,
+                    p_instock,
+                    p_cod
+                ) values (
+                    "${product.productBaseInfoV1.title}",
+                    "${req.params.category}",
+                    "${product.productBaseInfoV1.imageUrls['200x200']}",
+                    "${product.productBaseInfoV1.imageUrls['400x400']}",
+                    "${product.productBaseInfoV1.imageUrls['800x800']}",
+                    ${product.productBaseInfoV1.maximumRetailPrice.amount},
+                    "${product.productBaseInfoV1.maximumRetailPrice.currency}",
+                    "${product.productBaseInfoV1.productUrl}",
+                    "${product.productBaseInfoV1.productBrand}",
+                    ${product.productBaseInfoV1.inStock},
+                    ${product.productBaseInfoV1.codAvailable}
+                )`);
+               });/* for each products*/
+
+               if(data.nextUrl){
+                insertProductsFromUrl(data.nextUrl);
+                console.log(data.nextUrl);
+               }
+              else
+                resolve("success");
+          }).catch(function(error){
+            console.log("error occured + \n");
+            console.log(error);
+          });
+        }
+        insertProductsFromUrl(getUrl);
     });
-  }).then(function(result){
-    res.send(result);
-  }).catch(function(error){
-    console.log(error);
+   
+  }).then(function(tempData){
+    res.send(tempData);
   });
 });
 
