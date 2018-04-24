@@ -3,12 +3,6 @@ var router = express.Router();
 var dbConnection = require('../../dbConnection');
 var fkClient = require('../fkClient');
 
-router.get('/delete/:category',function(req,res,next){
-  /*should delete all items in the category in db*/
-  dbConnection.query("delete from nextUrls where category_name='"+req.params.category+"'");
-  res.send(req.params.category+"'s all Next URL are Deleted");
-});
-
 router.get('/:category',function(req,res,next){
   /*should update the particular category*/
   
@@ -69,7 +63,7 @@ router.get('/:category',function(req,res,next){
                 console.log(data.nextUrl);
                }
               else
-                resolve("success");
+                resolve("Inserted Products Into The Database");
           }).catch(function(error){
             console.log("error occured + \n");
             console.log(error);

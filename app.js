@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var updateCategoryRouter = require('./routes/updateCategory');
 var getProductsRouter = require('./routes/getProducts');
+var deleteCategoryRouter = require('./routes/deleteCategory');
 
 var app = express();
 
@@ -25,7 +26,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
-app.use('/updateCategory',updateCategoryRouter);
+app.use('/updatecategory',updateCategoryRouter);
+app.use('/deletecategory',deleteCategoryRouter);
 app.use('/products',getProductsRouter);
 
 // catch 404 and forward to error handler

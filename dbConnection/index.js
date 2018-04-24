@@ -8,7 +8,6 @@ var connection = mysql.createConnection({
 connection.connect();
 
 connection.query("drop table if exists productFeedListing");
-connection.query("drop table if exists nextUrls");
 connection.query("drop table if exists productsFeed");
 
 connection.query(`create table productFeedListing ( 
@@ -18,14 +17,6 @@ connection.query(`create table productFeedListing (
   deltaGetUrl varchar(200),
   PRIMARY KEY(category_id) 
 )`);
-
-connection.query(`create table nextUrls (
-  nextUrl_id int(30) AUTO_INCREMENT,
-  category_name varchar(200),
-  nextUrl varchar(200) NOT NULL,
-  PRIMARY KEY (nextUrl_id) 
-)`);
-
 
 connection.query(`create table productsFeed (
   p_id int(20) AUTO_INCREMENT,
