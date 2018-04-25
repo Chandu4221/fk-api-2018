@@ -44,23 +44,23 @@ router.get('/:category',function(req,res,next){
                     p_instock,
                     p_cod
                 ) values (
-                    "${product.productBaseInfoV1.title}",
-                    "${req.params.category}",
-                    "${product.productBaseInfoV1.imageUrls['200x200']}",
-                    "${product.productBaseInfoV1.imageUrls['400x400']}",
-                    "${product.productBaseInfoV1.imageUrls['800x800']}",
-                    ${product.productBaseInfoV1.maximumRetailPrice.amount},
-                    "${product.productBaseInfoV1.maximumRetailPrice.currency}",
-                    "${product.productBaseInfoV1.productUrl}",
-                    "${product.productBaseInfoV1.productBrand}",
-                    ${product.productBaseInfoV1.inStock},
-                    ${product.productBaseInfoV1.codAvailable}
+                    ${dbConnection.escape(product.productBaseInfoV1.title)},
+                    ${dbConnection.escape(req.params.category)},
+                    ${dbConnection.escape(product.productBaseInfoV1.imageUrls['200x200'])},
+                    ${dbConnection.escape(product.productBaseInfoV1.imageUrls['400x400'])},
+                    ${dbConnection.escape(product.productBaseInfoV1.imageUrls['800x800'])},
+                    ${dbConnection.escape(product.productBaseInfoV1.maximumRetailPrice.amount)},
+                    ${dbConnection.escape(product.productBaseInfoV1.maximumRetailPrice.currency)},
+                    ${dbConnection.escape(product.productBaseInfoV1.productUrl)},
+                    ${dbConnection.escape(product.productBaseInfoV1.productBrand)},
+                    ${dbConnection.escape(product.productBaseInfoV1.inStock)},
+                    ${dbConnection.escape(product.productBaseInfoV1.codAvailable)}
                 )`);
                });/* for each products*/
 
-               if(data.nextUrl){
-                insertProductsFromUrl(data.nextUrl);
-                console.log(data.nextUrl);
+               if(json_data.nextUrl){
+                insertProductsFromUrl(json_data.nextUrl);
+                console.log(json_data.nextUrl);
                }
               else
                 resolve("Inserted Products Into The Database");
