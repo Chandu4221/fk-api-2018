@@ -19,7 +19,8 @@ connection.query(`create table productFeedListing (
 )`);
 
 connection.query(`create table productsFeed (
-  p_id int(20) AUTO_INCREMENT,
+  id int(20) AUTO_INCREMENT,
+  p_id varchar(200) UNIQUE,
   p_category varchar(20),
   p_title varchar(1000),
   p_img_small varchar(1000),
@@ -31,7 +32,7 @@ connection.query(`create table productsFeed (
   p_productBrand varchar(1000),
   p_instock tinyint(1),
   p_cod tinyint(1),
-  PRIMARY KEY (p_id)
+  PRIMARY KEY (id)
 )`);
 
 module.exports = connection;

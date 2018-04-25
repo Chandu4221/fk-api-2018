@@ -32,6 +32,7 @@ router.get('/:category',function(req,res,next){
                  json_data.products.forEach(function(product){
                 /*insert into database */
                 dbConnection.query(`insert into productsfeed(
+                    p_id,
                     p_title,
                     p_category,
                     p_img_small,
@@ -44,6 +45,7 @@ router.get('/:category',function(req,res,next){
                     p_instock,
                     p_cod
                 ) values (
+                    ${dbConnection.escape(product.productBaseInfoV1.productId)},
                     ${dbConnection.escape(product.productBaseInfoV1.title)},
                     ${dbConnection.escape(req.params.category)},
                     ${dbConnection.escape(product.productBaseInfoV1.imageUrls['200x200'])},
